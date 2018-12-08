@@ -33,7 +33,7 @@ long analogReadN(int pin, int N)
 }
 
 
-
+// Souf
 float DistUS(int Broche) {
   
   //Impulsion pour le capteur US
@@ -52,6 +52,7 @@ float DistUS(int Broche) {
 
 
 // Retourne l'angle entre l'orientation du robot et la direction sombre
+// Souf
 int DirLowLux() {
   //Front, Right, Back, Left 0° -> 360° sens horaire
   LumF =  analogReadN(LuxAD, 10);
@@ -66,10 +67,7 @@ int DirLowLux() {
  if(LumB > LumR && LumB > LumL && LumB > LumF)
    return(180);
  if(LumL > LumR && LumL > LumF && LumL > LumB)
-   return(270);
-
-   
-  return(dir);
+   return(270);  
 }
 
 
