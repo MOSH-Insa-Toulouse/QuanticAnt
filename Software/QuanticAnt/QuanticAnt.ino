@@ -8,17 +8,30 @@
  * 
  ***********************************************************************/
 
+#include <Servo.h> // Voir l'exemple "SERVO" dans le menu arduino
 
 #define USL //Ultrason Left
 #define USF //Ultrason Front
 #define USR //Ultrason Right
 #define ECHO //Retour ultrason
 #define BUZZ //Buzzer pin (doit etre PWM)
+#define LUXF //Lumiere Front (doit etre analog)
+#define LUXB //Lumiere Back (doit etre analog)
+#define LUXL //Lumiere Left (doit etre analog)
+#define LUXR //Lumiere Right (doit etre analog)
 
-#define PROX_TH 10
 
-//Fonction qui retourne la distance en mm entre le capteur "Broche" et un obstacle à moins de 2m.
-//Bloque le code pendant 6ms max
+#define PROX_TH 10 // distance en cm a partir de laquelle le robot veut changer de direction
+
+
+
+//----Variables motrices
+Servo servoF;  // Objet associe au servo avant
+Servo servoB;  // Objet associe au servo arriere
+Servo servoC;  // Objet associe au servo central
+
+
+
 
 
 
@@ -33,6 +46,9 @@ long analogReadN(int pin, int N)
 }
 
 
+
+//Fonction qui retourne la distance en mm entre le capteur "Broche" et un obstacle à moins de 2m.
+//Bloque le code pendant 6ms max
 // Souf
 float DistUS(int Broche) {
   
@@ -41,24 +57,24 @@ float DistUS(int Broche) {
   delayMicroseconds(10);
   digitalWrite(Broche, LOW);
   
-  // Attente de l'echo... 6ms timout (environ 2m, on est un insecte apres tout)
+  // Attente de l'echo... 6ms timout (environ 2m, on est un insecte apres tout, on voit pas loin)
   long dtus = pulseIn(ECHO, HIGH, 6000);
   
-  float dist = (dtus * 0.34)/2.0;
+  float dist = (dtus * 0.34)/2.0; //conversion en cm
    
   return(dist);
   //Les 3 lignes précedentes peuvent etre combinees en 1 (reduisant la lisibilite)
 }
 
 
-// Retourne l'angle entre l'orientation du robot et la direction sombre
+// Retourne l'angle entre l'orientation du robot et la direction CLAIRE
 // Souf
 int DirLowLux() {
   //Front, Right, Back, Left 0° -> 360° sens horaire
-  LumF =  analogReadN(LuxAD, 10);
-  LumL =  analogReadN(LuxAD, 10);
-  LumR =  analogReadN(LuxAD, 10);
-  LumB =  analogReadN(LuxAD, 10);
+  LumF =  analogReadN(LUXF, 10);
+  LumL =  analogReadN(LUXL, 10);
+  LumR =  analogReadN(LUXR, 10);
+  LumB =  analogReadN(LUXB, 10);
 
   if(LumF > LumR && LumF > LumL && LumF > LumB)
    return(0);
@@ -72,6 +88,7 @@ int DirLowLux() {
 
 
 // Deplace QuanticAnt a la vitesse speed et avec un angle (+ => gauche, - => droite). Angle = 90 => rotation sur place.
+//Quentin
 Motrice(int angle, int speed)
 {
   // A completer Quentin :)
