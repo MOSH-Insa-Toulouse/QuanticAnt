@@ -68,7 +68,7 @@ float DistUS(int Broche) {
 
 
 // Retourne l'angle entre l'orientation du robot et la direction CLAIRE
-// Souf
+// Quentin (souf avait commence)
 int DirLowLux() {
   //Front, Right, Back, Left 0° -> 360° sens horaire
   LumF =  analogReadN(LUXF, 10);
@@ -91,7 +91,7 @@ int DirLowLux() {
 //Quentin
 Motrice(int angle, int speed)
 {
-  // A completer Quentin :)
+  // A completer souf :)
 }
 
 
@@ -110,7 +110,6 @@ void setup() {
   digitalWrite(USF, LOW);
   digitalWrite(USR, LOW);
 
-  randomSeed(30); //preparation du generateur aleatoire
 }
 
 // the loop function runs over and over again forever
