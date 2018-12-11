@@ -10,15 +10,15 @@
 
 #include <Servo.h> // Voir l'exemple "SERVO" dans le menu arduino
 
-#define USL //Ultrason Left
-#define USF //Ultrason Front
-#define USR //Ultrason Right
-#define ECHO //Retour ultrason
-#define BUZZ //Buzzer pin (doit etre PWM)
-#define LUXF //Lumiere Front (doit etre analog)
-#define LUXB //Lumiere Back (doit etre analog)
-#define LUXL //Lumiere Left (doit etre analog)
-#define LUXR //Lumiere Right (doit etre analog)
+#define USL 6 //Ultrason Left
+#define USF 7//Ultrason Front
+#define USR 8//Ultrason Right
+#define ECHO 9//Retour ultrason
+#define BUZZ 10//Buzzer pin (doit etre PWM)
+#define LUXF A0//Lumiere Front (doit etre analog)
+#define LUXB A1//Lumiere Back (doit etre analog)
+#define LUXL A2//Lumiere Left (doit etre analog)
+#define LUXR A3//Lumiere Right (doit etre analog)
 
 
 #define PROX_TH 10 // distance en cm a partir de laquelle le robot veut changer de direction
@@ -40,7 +40,7 @@ long analogReadN(int pin, int N)
 {
   long moy = 0;
   for(int i=0; i<N ; i++)
-    moy += analogRead(Pin);
+    moy += analogRead(pin);
     
   return(moy/N);
 }
@@ -71,25 +71,25 @@ float DistUS(int Broche) {
 // Quentin (souf avait commence)
 int DirLowLux() {
   //Front, Right, Back, Left 0° -> 360° sens horaire
-  LumF =  analogReadN(LUXF, 10);
-  LumL =  analogReadN(LUXL, 10);
-  LumR =  analogReadN(LUXR, 10);
-  LumB =  analogReadN(LUXB, 10);
+  int LumF =  analogReadN(LUXF, 10);
+  int LumL =  analogReadN(LUXL, 10);
+  int LumR =  analogReadN(LUXR, 10);
+  int LumB =  analogReadN(LUXB, 10);
 
   if(LumF > LumR && LumF > LumL && LumF > LumB)
-   return(0);
+   return(2);
   if(LumR > LumF && LumR > LumL && LumR > LumB)
-   return(90);
+   return(5);
  if(LumB > LumR && LumB > LumL && LumB > LumF)
-   return(180);
+   return(3);
  if(LumL > LumR && LumL > LumF && LumL > LumB)
-   return(270);  
+   return(4);  
 }
 
 
 // Deplace QuanticAnt a la vitesse speed et avec un angle (+ => gauche, - => droite). Angle = 90 => rotation sur place.
 //Quentin
-Motrice(int angle, int speed)
+void Motrice(int angle, int speed)
 {
   // A completer souf :)
 }
@@ -102,6 +102,10 @@ Motrice(int angle, int speed)
 void setup() {
   
   //Initialisation des capteurs US
+  pinMode(LUXF, INPUT);
+  pinMode(LUXB, INPUT);
+  pinMode(LUXR, INPUT);
+  pinMode(LUXL, INPUT);
   pinMode(USL, OUTPUT);
   pinMode(USF, OUTPUT);
   pinMode(USR, OUTPUT);
@@ -116,10 +120,15 @@ void setup() {
 void loop() {
 
 
-  random(0, 100); //Nouvelles envies de QuanticAnt
-
+  //random(0, 100); //Nouvelles envies de QuanticAnt
+  digitalWrite(2, LOW);
+  digitalWrite(3, LOW);
+  digitalWrite(4, LOW);
+  digitalWrite(5, LOW);
+  digitalWrite(DirLowLux(), HIGH);
+  delay(300);
   // Un objet est trop proche droit devant
-  if(dist(USF) < PROX_TH || dist(USR) < PROX_TH/2 ||  dist(USL) < PROX_TH/2)
+ /* if(dist(USF) < PROX_TH || dist(USR) < PROX_TH/2 ||  dist(USL) < PROX_TH/2)
   {
     if(dist(USR) < dist(USL) ) // Tourner vers droite
     {
@@ -130,7 +139,7 @@ void loop() {
        Motrice(90, V);
     }
   }
-
+*/
   // Envie de bouger ? + Vitesse voulue
 
   // Rotation lumiere
