@@ -239,8 +239,6 @@ Wire Wire Line
 Wire Wire Line
 	10200 2900 10550 2900
 Wire Wire Line
-	10200 2800 10550 2800
-Wire Wire Line
 	10200 2600 10550 2600
 Wire Wire Line
 	10200 1500 10300 1500
@@ -268,7 +266,7 @@ U 1 1 5BDC543A
 P 1750 5050
 F 0 "R2" H 1820 5096 50  0000 L CNN
 F 1 "LDR03" H 1820 5005 50  0000 L CNN
-F 2 "Connector_JST:JST_XH_B02B-XH-A_1x02_P2.50mm_Vertical" V 1925 5050 50  0001 C CNN
+F 2 "Connector_PinHeader_2.54mm:PinHeader_1x02_P2.54mm_Vertical" V 1925 5050 50  0001 C CNN
 F 3 "http://www.elektronica-componenten.nl/WebRoot/StoreNL/Shops/61422969/54F1/BA0C/C664/31B9/2173/C0A8/2AB9/2AEF/LDR03IMP.pdf" H 1750 5000 50  0001 C CNN
 	1    1750 5050
 	1    0    0    -1  
@@ -279,7 +277,7 @@ U 1 1 5BDC54F3
 P 2350 5050
 F 0 "R4" H 2420 5096 50  0000 L CNN
 F 1 "LDR03" H 2420 5005 50  0000 L CNN
-F 2 "Connector_JST:JST_XH_B02B-XH-A_1x02_P2.50mm_Vertical" V 2525 5050 50  0001 C CNN
+F 2 "Connector_PinHeader_2.54mm:PinHeader_1x02_P2.54mm_Vertical" V 2525 5050 50  0001 C CNN
 F 3 "http://www.elektronica-componenten.nl/WebRoot/StoreNL/Shops/61422969/54F1/BA0C/C664/31B9/2173/C0A8/2AB9/2AEF/LDR03IMP.pdf" H 2350 5000 50  0001 C CNN
 	1    2350 5050
 	1    0    0    -1  
@@ -290,7 +288,7 @@ U 1 1 5BDC5D1E
 P 3000 5050
 F 0 "R6" H 3070 5096 50  0000 L CNN
 F 1 "LDR03" H 3070 5005 50  0000 L CNN
-F 2 "Connector_JST:JST_XH_B02B-XH-A_1x02_P2.50mm_Vertical" V 3175 5050 50  0001 C CNN
+F 2 "Connector_PinHeader_2.54mm:PinHeader_1x02_P2.54mm_Vertical" V 3175 5050 50  0001 C CNN
 F 3 "http://www.elektronica-componenten.nl/WebRoot/StoreNL/Shops/61422969/54F1/BA0C/C664/31B9/2173/C0A8/2AB9/2AEF/LDR03IMP.pdf" H 3000 5000 50  0001 C CNN
 	1    3000 5050
 	1    0    0    -1  
@@ -301,7 +299,7 @@ U 1 1 5BDC5D25
 P 3600 5050
 F 0 "R8" H 3670 5096 50  0000 L CNN
 F 1 "LDR03" H 3670 5005 50  0000 L CNN
-F 2 "Connector_JST:JST_XH_B02B-XH-A_1x02_P2.50mm_Vertical" V 3775 5050 50  0001 C CNN
+F 2 "Connector_PinHeader_2.54mm:PinHeader_1x02_P2.54mm_Vertical" V 3775 5050 50  0001 C CNN
 F 3 "http://www.elektronica-componenten.nl/WebRoot/StoreNL/Shops/61422969/54F1/BA0C/C664/31B9/2173/C0A8/2AB9/2AEF/LDR03IMP.pdf" H 3600 5000 50  0001 C CNN
 	1    3600 5050
 	1    0    0    -1  
@@ -386,7 +384,7 @@ $EndComp
 Wire Wire Line
 	5150 3000 5300 3000
 Wire Wire Line
-	5300 3000 5300 2450
+	5300 3000 5300 2900
 Connection ~ 5300 2450
 Wire Wire Line
 	5300 2450 5150 2450
@@ -451,12 +449,7 @@ Connection ~ 2650 6200
 Wire Wire Line
 	2650 6200 3000 6200
 Wire Wire Line
-	10200 1600 11200 1600
-Wire Wire Line
-	11200 1600 11200 4900
-Wire Wire Line
 	3600 4900 3000 4900
-Connection ~ 3600 4900
 Wire Wire Line
 	3000 4900 2350 4900
 Wire Wire Line
@@ -520,45 +513,11 @@ F 3 "" H 1200 1150 50  0001 C CNN
 	1    1200 1150
 	1    0    0    -1  
 $EndComp
-$Comp
-L Device:R R1
-U 1 1 5BE0B72B
-P 1650 1050
-F 0 "R1" V 1443 1050 50  0000 C CNN
-F 1 "R" V 1534 1050 50  0000 C CNN
-F 2 "Resistor_THT:R_Axial_DIN0204_L3.6mm_D1.6mm_P1.90mm_Vertical" V 1580 1050 50  0001 C CNN
-F 3 "~" H 1650 1050 50  0001 C CNN
-	1    1650 1050
-	0    1    1    0   
-$EndComp
-Wire Wire Line
-	1200 1050 1500 1050
-$Comp
-L Switch:SW_Push SW1
-U 1 1 5BE11AD8
-P 2250 950
-F 0 "SW1" H 2250 1235 50  0000 C CNN
-F 1 "SW_Push" H 2250 1144 50  0000 C CNN
-F 2 "Button_Switch_THT:SW_PUSH_6mm" H 2250 1150 50  0001 C CNN
-F 3 "" H 2250 1150 50  0001 C CNN
-	1    2250 950 
-	1    0    0    -1  
-$EndComp
-Wire Wire Line
-	1200 950  2050 950 
-Wire Wire Line
-	2450 950  9050 950 
 Wire Wire Line
 	9050 950  9050 1350
 Connection ~ 9050 1350
 Wire Wire Line
 	9050 1350 9050 2000
-Wire Wire Line
-	1800 1050 8700 1050
-Wire Wire Line
-	8700 1050 8700 2900
-Wire Wire Line
-	8700 2900 9400 2900
 Wire Wire Line
 	5300 2450 5300 1750
 $Comp
@@ -699,8 +658,6 @@ F 3 "http://forums.parallax.com/uploads/attachments/46831/74481.png" H 10350 436
 	0    1    1    0   
 $EndComp
 Wire Wire Line
-	3600 4900 11200 4900
-Wire Wire Line
 	9350 4150 9800 4150
 Wire Wire Line
 	9800 4150 9800 4250
@@ -715,8 +672,6 @@ Wire Wire Line
 	10350 4100 9900 4100
 Wire Wire Line
 	9900 4100 9900 4250
-Wire Wire Line
-	9900 4100 9450 4100
 Wire Wire Line
 	9450 4100 9450 4250
 Connection ~ 9900 4100
@@ -748,7 +703,7 @@ U 1 1 5BE382D5
 P 8900 4300
 F 0 "BZ1" V 8860 4452 50  0000 L CNN
 F 1 "Buzzer" V 8951 4452 50  0000 L CNN
-F 2 "Buzzer_Beeper:MagneticBuzzer_Kingstate_KCG0601" V 8875 4400 50  0001 C CNN
+F 2 "Connector_PinHeader_2.54mm:PinHeader_1x02_P2.54mm_Horizontal" V 8875 4400 50  0001 C CNN
 F 3 "~" V 8875 4400 50  0001 C CNN
 	1    8900 4300
 	0    1    1    0   
@@ -768,30 +723,8 @@ Wire Wire Line
 	10200 2100 11000 2100
 Wire Wire Line
 	10200 2000 10950 2000
-$Comp
-L Device:R_POT RV1
-U 1 1 5BE52801
-P 9150 3900
-F 0 "RV1" H 9080 3946 50  0000 R CNN
-F 1 "R_POT" H 9080 3855 50  0000 R CNN
-F 2 "Potentiometer_THT:Potentiometer_Alps_RK09L_Single_Vertical" H 9150 3900 50  0001 C CNN
-F 3 "~" H 9150 3900 50  0001 C CNN
-	1    9150 3900
-	0    -1   -1   0   
-$EndComp
-Wire Wire Line
-	9150 3750 9300 3750
-Wire Wire Line
-	9300 3750 9300 3900
-Wire Wire Line
-	9300 3900 10950 3900
 Wire Wire Line
 	10950 2000 10950 3900
-Connection ~ 9300 3900
-Wire Wire Line
-	9000 3850 8800 3850
-Wire Wire Line
-	9000 3850 9000 3900
 Wire Wire Line
 	11100 1800 11100 3500
 Wire Wire Line
@@ -805,12 +738,6 @@ Wire Wire Line
 	8800 4200 8800 4150
 Wire Wire Line
 	8800 4150 9050 4150
-Wire Wire Line
-	9000 4200 9000 4000
-Wire Wire Line
-	9000 4000 8800 4000
-Wire Wire Line
-	8800 4000 8800 3850
 $Comp
 L power:GND #PWR0102
 U 1 1 5BE952FF
@@ -859,13 +786,6 @@ F 3 "~" H 7100 4350 50  0001 C CNN
 	1    0    0    -1  
 $EndComp
 Wire Wire Line
-	7100 4200 7300 4200
-Wire Wire Line
-	7300 4200 7300 4300
-Wire Wire Line
-	7300 4200 7300 4050
-Connection ~ 7300 4200
-Wire Wire Line
 	7600 5950 11050 5950
 Wire Wire Line
 	11050 5950 11050 4000
@@ -874,10 +794,7 @@ Wire Wire Line
 Wire Wire Line
 	10900 4000 10900 2300
 Wire Wire Line
-	7600 4050 7600 4300
-Wire Wire Line
 	10200 2300 10900 2300
-Connection ~ 7600 4300
 Wire Wire Line
 	7600 4300 7600 5950
 $Comp
@@ -891,4 +808,92 @@ F 3 "" H 7100 4500 50  0001 C CNN
 	1    7100 4500
 	1    0    0    -1  
 $EndComp
+Wire Wire Line
+	1200 950  7200 950 
+Wire Wire Line
+	8700 2900 9400 2900
+$Comp
+L Device:R R1
+U 1 1 5C168D50
+P 9100 3900
+F 0 "R1" H 9170 3946 50  0000 L CNN
+F 1 "R" H 9170 3855 50  0000 L CNN
+F 2 "Resistor_THT:R_Axial_DIN0204_L3.6mm_D1.6mm_P2.54mm_Vertical" V 9030 3900 50  0001 C CNN
+F 3 "~" H 9100 3900 50  0001 C CNN
+	1    9100 3900
+	0    -1   -1   0   
+$EndComp
+Wire Wire Line
+	9000 4200 9000 4000
+Wire Wire Line
+	9000 4000 8950 4000
+Wire Wire Line
+	8950 3800 8950 3900
+Connection ~ 8950 3900
+Wire Wire Line
+	8950 3900 8950 4000
+Wire Wire Line
+	9250 3900 10950 3900
+Wire Wire Line
+	3600 4900 3600 2900
+Wire Wire Line
+	3600 2900 5300 2900
+Connection ~ 3600 4900
+Connection ~ 5300 2900
+Wire Wire Line
+	5300 2900 5300 2450
+$Comp
+L Device:R R11
+U 1 1 5C1A7B03
+P 6800 4350
+F 0 "R11" H 6870 4396 50  0000 L CNN
+F 1 "R" H 6870 4305 50  0000 L CNN
+F 2 "Resistor_THT:R_Axial_DIN0204_L3.6mm_D1.6mm_P2.54mm_Vertical" V 6730 4350 50  0001 C CNN
+F 3 "~" H 6800 4350 50  0001 C CNN
+	1    6800 4350
+	1    0    0    -1  
+$EndComp
+$Comp
+L power:GND #PWR0103
+U 1 1 5C1A7B0A
+P 6800 4500
+F 0 "#PWR0103" H 6800 4250 50  0001 C CNN
+F 1 "GND" H 6805 4327 50  0000 C CNN
+F 2 "" H 6800 4500 50  0001 C CNN
+F 3 "" H 6800 4500 50  0001 C CNN
+	1    6800 4500
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	6800 4200 6800 4050
+Wire Wire Line
+	6800 4050 7300 4050
+Wire Wire Line
+	7100 4200 7300 4200
+Wire Wire Line
+	7300 4200 7300 4300
+Wire Wire Line
+	10600 2800 10600 3700
+Wire Wire Line
+	10600 3700 8450 3700
+Wire Wire Line
+	8450 3700 8450 4050
+Wire Wire Line
+	8450 4050 7600 4050
+Wire Wire Line
+	10200 2800 10600 2800
+Wire Wire Line
+	7200 6200 9700 6200
+Wire Wire Line
+	9700 6200 9700 4100
+Wire Wire Line
+	9450 4100 9700 4100
+Wire Wire Line
+	7200 950  7200 6200
+Connection ~ 7200 950 
+Wire Wire Line
+	7200 950  9050 950 
+Connection ~ 9700 4100
+Wire Wire Line
+	9700 4100 9900 4100
 $EndSCHEMATC
