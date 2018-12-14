@@ -310,7 +310,7 @@ U 1 1 5BDC6569
 P 1750 6050
 F 0 "R3" H 1820 6096 50  0000 L CNN
 F 1 "R" H 1820 6005 50  0000 L CNN
-F 2 "Resistor_THT:R_Axial_DIN0204_L3.6mm_D1.6mm_P1.90mm_Vertical" V 1680 6050 50  0001 C CNN
+F 2 "Resistor_THT:R_Axial_DIN0204_L3.6mm_D1.6mm_P5.08mm_Horizontal" V 1680 6050 50  0001 C CNN
 F 3 "~" H 1750 6050 50  0001 C CNN
 	1    1750 6050
 	1    0    0    -1  
@@ -332,7 +332,7 @@ U 1 1 5BDC6623
 P 3000 6050
 F 0 "R7" H 3070 6096 50  0000 L CNN
 F 1 "R" H 3070 6005 50  0000 L CNN
-F 2 "Resistor_THT:R_Axial_DIN0204_L3.6mm_D1.6mm_P1.90mm_Vertical" V 2930 6050 50  0001 C CNN
+F 2 "Resistor_THT:R_Axial_DIN0204_L3.6mm_D1.6mm_P5.08mm_Horizontal" V 2930 6050 50  0001 C CNN
 F 3 "~" H 3000 6050 50  0001 C CNN
 	1    3000 6050
 	1    0    0    -1  
@@ -497,7 +497,7 @@ U 1 1 5BE0B266
 P 1000 1050
 F 0 "J1" H 1106 1328 50  0000 C CNN
 F 1 "Conn_01x03_Male" H 1106 1237 50  0000 C CNN
-F 2 "Connector_PinHeader_1.27mm:PinHeader_1x03_P1.27mm_Horizontal" H 1000 1050 50  0001 C CNN
+F 2 "Connector_PinHeader_2.54mm:PinHeader_1x03_P2.54mm_Horizontal" H 1000 1050 50  0001 C CNN
 F 3 "~" H 1000 1050 50  0001 C CNN
 	1    1000 1050
 	1    0    0    -1  
@@ -526,7 +526,7 @@ U 1 1 5BE17049
 P 6200 3100
 F 0 "D3" H 6200 2835 50  0000 C CNN
 F 1 "DIODE" H 6200 2926 50  0000 C CNN
-F 2 "Diode_THT:D_DO-15_P5.08mm_Vertical_KathodeUp" H 6200 3100 50  0001 C CNN
+F 2 "Diode_THT:D_T-1_P10.16mm_Horizontal" H 6200 3100 50  0001 C CNN
 F 3 "" H 6200 3100 50  0001 C CNN
 	1    6200 3100
 	1    0    0    -1  
@@ -537,7 +537,7 @@ U 1 1 5BE170BF
 P 6200 2550
 F 0 "D2" H 6200 2285 50  0000 C CNN
 F 1 "DIODE" H 6200 2376 50  0000 C CNN
-F 2 "Diode_THT:D_A-405_P5.08mm_Vertical_KathodeUp" H 6200 2550 50  0001 C CNN
+F 2 "Diode_THT:D_T-1_P10.16mm_Horizontal" H 6200 2550 50  0001 C CNN
 F 3 "" H 6200 2550 50  0001 C CNN
 	1    6200 2550
 	1    0    0    -1  
@@ -548,7 +548,7 @@ U 1 1 5BE17121
 P 6200 1850
 F 0 "D1" H 6200 1585 50  0000 C CNN
 F 1 "DIODE" H 6200 1676 50  0000 C CNN
-F 2 "Diode_THT:D_DO-15_P5.08mm_Vertical_KathodeUp" H 6200 1850 50  0001 C CNN
+F 2 "Diode_THT:D_T-1_P10.16mm_Horizontal" H 6200 1850 50  0001 C CNN
 F 3 "" H 6200 1850 50  0001 C CNN
 	1    6200 1850
 	1    0    0    -1  
@@ -896,4 +896,98 @@ Wire Wire Line
 Connection ~ 9700 4100
 Wire Wire Line
 	9700 4100 9900 4100
+$Comp
+L Device:R R12
+U 1 1 5C147C7E
+P 1600 2950
+F 0 "R12" H 1670 2996 50  0000 L CNN
+F 1 "R" H 1670 2905 50  0000 L CNN
+F 2 "Resistor_THT:R_Axial_DIN0204_L3.6mm_D1.6mm_P5.08mm_Horizontal" V 1530 2950 50  0001 C CNN
+F 3 "~" H 1600 2950 50  0001 C CNN
+	1    1600 2950
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	1600 2200 1600 2800
+$Comp
+L Device:R R13
+U 1 1 5C14DD6D
+P 2450 2200
+F 0 "R13" H 2520 2246 50  0000 L CNN
+F 1 "R" H 2520 2155 50  0000 L CNN
+F 2 "Resistor_THT:R_Axial_DIN0204_L3.6mm_D1.6mm_P5.08mm_Horizontal" V 2380 2200 50  0001 C CNN
+F 3 "~" H 2450 2200 50  0001 C CNN
+	1    2450 2200
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	2450 2350 2550 2350
+Wire Wire Line
+	2450 1450 2450 1550
+$Comp
+L Device:R R14
+U 1 1 5C1543E2
+P 950 3900
+F 0 "R14" H 1020 3946 50  0000 L CNN
+F 1 "R" H 1020 3855 50  0000 L CNN
+F 2 "Resistor_THT:R_Axial_DIN0204_L3.6mm_D1.6mm_P5.08mm_Horizontal" V 880 3900 50  0001 C CNN
+F 3 "~" H 950 3900 50  0001 C CNN
+	1    950  3900
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	950  4050 1300 4050
+$Comp
+L power:GND #PWR?
+U 1 1 5C15ACC3
+P 1550 4050
+F 0 "#PWR?" H 1550 3800 50  0001 C CNN
+F 1 "GND" H 1555 3877 50  0000 C CNN
+F 2 "" H 1550 4050 50  0001 C CNN
+F 3 "" H 1550 4050 50  0001 C CNN
+	1    1550 4050
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	2200 3150 2200 3100
+Wire Wire Line
+	2200 2200 1900 2200
+Wire Wire Line
+	950  2200 950  3750
+Connection ~ 2200 3100
+Wire Wire Line
+	2200 3100 2200 3050
+Connection ~ 1600 2200
+Wire Wire Line
+	1600 2200 950  2200
+Wire Wire Line
+	1300 4050 1300 3100
+Wire Wire Line
+	1300 3100 1600 3100
+Connection ~ 1300 4050
+Wire Wire Line
+	1300 4050 1550 4050
+Connection ~ 1600 3100
+Wire Wire Line
+	1600 3100 2200 3100
+Wire Wire Line
+	2200 3050 2550 3050
+Wire Wire Line
+	2550 3050 2550 2350
+Connection ~ 2200 3050
+Wire Wire Line
+	2200 3050 2200 2200
+Connection ~ 2550 2350
+Wire Wire Line
+	2550 2350 3050 2350
+Wire Wire Line
+	1900 2200 1900 1550
+Wire Wire Line
+	1900 1550 2450 1550
+Connection ~ 1900 2200
+Wire Wire Line
+	1900 2200 1600 2200
+Connection ~ 2450 1550
+Wire Wire Line
+	2450 1550 2450 2050
 $EndSCHEMATC
