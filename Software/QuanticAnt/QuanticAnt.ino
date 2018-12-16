@@ -10,11 +10,11 @@
 
 #include <Servo.h> // Voir l'exemple "SERVO" dans le menu arduino
 
-#define USL 6 //Ultrason Left
-#define USF 7//Ultrason Front
-#define USR 8//Ultrason Right
-#define ECHO 9//Retour ultrason
-#define BUZZ 10//Buzzer pin (doit etre PWM)
+#define USL 11 //Ultrason Left
+#define USF 8//Ultrason Front
+#define USR 10//Ultrason Right
+#define ECHO 12//Retour ultrason
+#define BUZZ 9//Buzzer pin (doit etre PWM)
 #define LUXF A0//Lumiere Front (doit etre analog)
 #define LUXB A1//Lumiere Back (doit etre analog)
 #define LUXL A2//Lumiere Left (doit etre analog)
@@ -26,9 +26,9 @@
 
 
 //----Variables motrices
-Servo servoF;  // Objet associe au servo avant
-Servo servoB;  // Objet associe au servo arriere
-Servo servoC;  // Objet associe au servo central
+Servo servoL;  // Objet associe au servo gauche
+Servo servoR;  // Objet associe au servo droit
+Servo servoD;  // Objet associe au servo arriere
 
 
 
@@ -47,9 +47,38 @@ long analogReadN(int pin, int N)
 
 
 
+// Fonction qui genere un bruit une fois invoquee.
+// Fonction bloquante, attention (le temps du bruit)
+void bruit() {
+    int silence = random(1, 6); // duree du silence avant de reprendre le champ
+    // notes du champ du robot
+    int melody[] = {
+      208, 494, 415, 494, 415, 0
+    };
+    //NOTE_B2, NOTE_B3, NOTE_B2, 
+    // note durations: 4 = quarter note, 8 = eighth note, etc.:
+    int noteDurations[] = {
+      3*32, 3*32, 3*32, 3*32, 3*32, silence
+    };//32, 32, 32, 
+    for (int thisNote = 0; thisNote < 6; thisNote++) {
+  
+      // to calculate the note duration, take one second divided by the note type.
+      //e.g. quarter note = 1000 / 4, eighth note = 1000/8, etc.
+      int noteDuration = 3000 / noteDurations[thisNote];
+      tone(8, melody[thisNote], noteDuration);
+  
+      // to distinguish the notes, set a minimum time between them.
+      // the note's duration + 30% seems to work well:
+      int pauseBetweenNotes = noteDuration * 1.30;
+      delay(pauseBetweenNotes);
+      // stop the tone playing:
+      noTone(8);
+  }
+}
+
+
 //Fonction qui retourne la distance en mm entre le capteur "Broche" et un obstacle à moins de 2m.
 //Bloque le code pendant 6ms max
-// Souf
 float DistUS(int Broche) {
   
   //Impulsion pour le capteur US
@@ -68,7 +97,6 @@ float DistUS(int Broche) {
 
 
 // Retourne l'angle entre l'orientation du robot et la direction CLAIRE
-// Quentin (souf avait commence)
 int DirLowLux() {
   //Front, Right, Back, Left 0° -> 360° sens horaire
   int LumF =  analogReadN(LUXF, 10);
@@ -113,6 +141,9 @@ void setup() {
   digitalWrite(USL, LOW);
   digitalWrite(USF, LOW);
   digitalWrite(USR, LOW);
+  
+  
+  randomSeed(analogRead(A4));
 
 }
 
@@ -120,12 +151,6 @@ void setup() {
 void loop() {
 
 
-  //random(0, 100); //Nouvelles envies de QuanticAnt
-  digitalWrite(2, LOW);
-  digitalWrite(3, LOW);
-  digitalWrite(4, LOW);
-  digitalWrite(5, LOW);
-  digitalWrite(DirLowLux(), HIGH);
   delay(300);
   // Un objet est trop proche droit devant
  /* if(dist(USF) < PROX_TH || dist(USR) < PROX_TH/2 ||  dist(USL) < PROX_TH/2)
