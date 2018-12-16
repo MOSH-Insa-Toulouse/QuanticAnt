@@ -19,16 +19,25 @@
 #define LUXB A1//Lumiere Back (doit etre analog)
 #define LUXL A2//Lumiere Left (doit etre analog)
 #define LUXR A3//Lumiere Right (doit etre analog)
-
+#define LEDR 2 // led droite rouge
+#define LEDL 7 // led gauche rouge
 
 #define PROX_TH 10 // distance en cm a partir de laquelle le robot veut changer de direction
 
-
-
+//Variables globales
+int C=0; //compteur de loop avec overflow
+int quantic=0; // Valeur aleatoire entre 0 et 100 qui change a chaque boucle
 //----Variables motrices
-Servo servoL;  // Objet associe au servo gauche
-Servo servoR;  // Objet associe au servo droit
-Servo servoD;  // Objet associe au servo arriere
+//Sens de rotations et positions initiales
+int sensA =1;
+int sensB =-1;
+int sensC =1;
+int posA = 59;
+int posB = 139;
+int posC = 65;
+Servo phaseA;  // Moteur droite
+Servo phaseB;  // Moteur gauche
+Servo phaseC;  // Moteur equilibrage
 
 
 
@@ -114,12 +123,62 @@ int DirLowLux() {
    return(4);  
 }
 
+int MaxLux() {
+  int maxL = analogReadN(LUXF, 10);
+  if( analogReadN(LUXL, 10) > maxL)
+     maxL = analogReadN(LUXL, 10);
+  if( analogReadN(LUXR, 10) > maxL)
+     maxL = analogReadN(LUXR, 10);
+  if( analogReadN(LUXB, 10) > maxL)
+     maxL = analogReadN(LUXB, 10);
+  return maxL;
+}
 
-// Deplace QuanticAnt a la vitesse speed et avec un angle (+ => gauche, - => droite). Angle = 90 => rotation sur place.
-//Quentin
-void Motrice(int angle, int speed)
+//Controle des yeux rouge du robot
+void yeux(int droite, int gauche)
 {
-  // A completer souf :)
+  digitalWrite(LEDR, droite);
+  digitalWrtie(LEDL, gauche);
+}
+
+// Deplace QuanticAnt a la vitesse speed. La valeur Dir donne la direction selon le pave numerique
+//789 : 8 = avancer
+//456 : 4 et 6 = tourner
+//123 : 2 = reculer
+void motrice(int vitesse, int dir)
+{
+  if(posA<=59)
+      sensA =4;
+  if( posA >= 130)
+      sensA = -4;
+
+    if(posB<=59)
+    {
+      sensB =4;
+      if(dir ==2 || dir == 6)
+        posC = 70;
+      else
+        posC = 110;
+    }
+    if( posB >= 130)
+    {
+      if(dir ==2 || dir == 8)
+        posA = 59;
+     if(dir ==4 || dir == 8)
+        posA = 130;
+      sensB = -4;
+      if(dir == 8 || dir == 4)
+        posC = 70;
+      else
+        posC = 110;
+    }
+    
+    posA+=sensA;
+    posB+=sensB; 
+    phaseA.write(posA);              // tell servo to go to position in variable 'pos'
+    phaseB.write(posB);              // tell servo to go to position in variable 'pos'
+    phaseC.write(posC);              // tell servo to go to position in variable 'pos'
+    delay(80/vitesse);  
 }
 
 
@@ -144,14 +203,24 @@ void setup() {
   
   
   randomSeed(analogRead(A4));
+  
+  //Preparation des moteurs
+  phaseA.attach(3);
+  phaseB.attach(5); 
+  phaseC.attach(6);
+  Serial.begin(9600);
+     phaseA.write(posA);              // tell servo to go to position in variable 'pos'
+    phaseB.write(posB);              // tell servo to go to position in variable 'pos'
+    phaseC.write(posC);   
+  delay(500);
 
 }
 
 // the loop function runs over and over again forever
 void loop() {
+  quantic = random(0, 100);
 
-
-  delay(300);
+  
   // Un objet est trop proche droit devant
  /* if(dist(USF) < PROX_TH || dist(USR) < PROX_TH/2 ||  dist(USL) < PROX_TH/2)
   {
@@ -174,5 +243,24 @@ void loop() {
 
   // Bruit ?
   
+  
+  //controle des yeux dans le noir
+  if(MaxLux() < 300)
+  {
+    if(quantic < 10)
+      yeux(LOW, LOW);
+    if(quantic >= 10 && quantic < 40)
+      yeux(LOW, HIGH);
+    if(quantic >= 40 && quantic < 80)
+      yeux(HIGH, LOW);
+    if(quantic >= 80)
+      yeux(HIGH, HIGH);
+  }
+  else
+  {
+    yeux(LOW, LOW);
+  }
+  C++;
+  delay(300);
 }
 
