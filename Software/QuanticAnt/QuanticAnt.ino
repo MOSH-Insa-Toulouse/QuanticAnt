@@ -138,7 +138,7 @@ int MaxLux() {
 void yeux(int droite, int gauche)
 {
   digitalWrite(LEDR, droite);
-  digitalWrtie(LEDL, gauche);
+  digitalWrite(LEDL, gauche);
 }
 
 // Deplace QuanticAnt a la vitesse speed. La valeur Dir donne la direction selon le pave numerique
@@ -241,7 +241,7 @@ void loop() {
   // Deplacement
 
 
-  // Bruit ?
+   motrice(4, 2);
   
   
   //controle des yeux dans le noir
@@ -261,6 +261,6 @@ void loop() {
     yeux(LOW, LOW);
   }
   C++;
-  delay(300);
+  //delay(300);
 }
 
