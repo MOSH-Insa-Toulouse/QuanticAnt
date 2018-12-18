@@ -383,8 +383,6 @@ F 3 "" H 5500 3450 50  0001 C CNN
 $EndComp
 Wire Wire Line
 	5150 3000 5300 3000
-Wire Wire Line
-	5300 3000 5300 2900
 Connection ~ 5300 2450
 Wire Wire Line
 	5300 2450 5150 2450
@@ -451,7 +449,7 @@ Wire Wire Line
 Wire Wire Line
 	3600 4900 3000 4900
 Wire Wire Line
-	3000 4900 2350 4900
+	3000 4900 2600 4900
 Wire Wire Line
 	2350 4900 2350 4950
 Wire Wire Line
@@ -834,14 +832,6 @@ Wire Wire Line
 	8950 3900 8950 4000
 Wire Wire Line
 	9250 3900 10950 3900
-Wire Wire Line
-	3600 4900 3600 2900
-Wire Wire Line
-	3600 2900 5300 2900
-Connection ~ 3600 4900
-Connection ~ 5300 2900
-Wire Wire Line
-	5300 2900 5300 2450
 $Comp
 L Device:R R11
 U 1 1 5C1A7B03
@@ -899,31 +889,25 @@ Wire Wire Line
 $Comp
 L Device:R R12
 U 1 1 5C147C7E
-P 1600 2950
-F 0 "R12" H 1670 2996 50  0000 L CNN
-F 1 "R" H 1670 2905 50  0000 L CNN
-F 2 "Resistor_THT:R_Axial_DIN0204_L3.6mm_D1.6mm_P5.08mm_Horizontal" V 1530 2950 50  0001 C CNN
-F 3 "~" H 1600 2950 50  0001 C CNN
-	1    1600 2950
+P 850 3900
+F 0 "R12" H 920 3946 50  0000 L CNN
+F 1 "R" H 920 3855 50  0000 L CNN
+F 2 "Resistor_THT:R_Axial_DIN0204_L3.6mm_D1.6mm_P5.08mm_Horizontal" V 780 3900 50  0001 C CNN
+F 3 "~" H 850 3900 50  0001 C CNN
+	1    850  3900
 	1    0    0    -1  
 $EndComp
-Wire Wire Line
-	1600 2200 1600 2800
 $Comp
 L Device:R R13
 U 1 1 5C14DD6D
-P 2450 2200
-F 0 "R13" H 2520 2246 50  0000 L CNN
-F 1 "R" H 2520 2155 50  0000 L CNN
-F 2 "Resistor_THT:R_Axial_DIN0204_L3.6mm_D1.6mm_P5.08mm_Horizontal" V 2380 2200 50  0001 C CNN
-F 3 "~" H 2450 2200 50  0001 C CNN
-	1    2450 2200
+P 750 3900
+F 0 "R13" H 820 3946 50  0000 L CNN
+F 1 "R" H 820 3855 50  0000 L CNN
+F 2 "Resistor_THT:R_Axial_DIN0204_L3.6mm_D1.6mm_P5.08mm_Horizontal" V 680 3900 50  0001 C CNN
+F 3 "~" H 750 3900 50  0001 C CNN
+	1    750  3900
 	1    0    0    -1  
 $EndComp
-Wire Wire Line
-	2450 2350 2550 2350
-Wire Wire Line
-	2450 1450 2450 1550
 $Comp
 L Device:R R14
 U 1 1 5C1543E2
@@ -935,8 +919,6 @@ F 3 "~" H 950 3900 50  0001 C CNN
 	1    950  3900
 	1    0    0    -1  
 $EndComp
-Wire Wire Line
-	950  4050 1300 4050
 $Comp
 L power:GND #PWR0104
 U 1 1 5C15ACC3
@@ -948,48 +930,6 @@ F 3 "" H 1550 4050 50  0001 C CNN
 	1    1550 4050
 	1    0    0    -1  
 $EndComp
-Wire Wire Line
-	2200 3150 2200 3100
-Wire Wire Line
-	2200 2200 1900 2200
-Wire Wire Line
-	950  2200 950  3750
-Connection ~ 2200 3100
-Wire Wire Line
-	2200 3100 2200 3050
-Connection ~ 1600 2200
-Wire Wire Line
-	1600 2200 950  2200
-Wire Wire Line
-	1300 4050 1300 3100
-Wire Wire Line
-	1300 3100 1600 3100
-Connection ~ 1300 4050
-Wire Wire Line
-	1300 4050 1550 4050
-Connection ~ 1600 3100
-Wire Wire Line
-	1600 3100 2200 3100
-Wire Wire Line
-	2200 3050 2550 3050
-Wire Wire Line
-	2550 3050 2550 2350
-Connection ~ 2200 3050
-Wire Wire Line
-	2200 3050 2200 2200
-Connection ~ 2550 2350
-Wire Wire Line
-	2550 2350 3050 2350
-Wire Wire Line
-	1900 2200 1900 1550
-Wire Wire Line
-	1900 1550 2450 1550
-Connection ~ 1900 2200
-Wire Wire Line
-	1900 2200 1600 2200
-Connection ~ 2450 1550
-Wire Wire Line
-	2450 1550 2450 2050
 $Comp
 L Device:R R15
 U 1 1 5C154DF3
@@ -1017,4 +957,43 @@ F 3 "" H 6750 3850 50  0001 C CNN
 	1    6750 3850
 	1    0    0    -1  
 $EndComp
+Wire Wire Line
+	650  4050 650  3750
+Wire Wire Line
+	650  3750 750  3750
+Wire Wire Line
+	650  4050 750  4050
+Connection ~ 750  4050
+Wire Wire Line
+	750  4050 850  4050
+Connection ~ 850  4050
+Wire Wire Line
+	850  4050 950  4050
+Connection ~ 950  4050
+Wire Wire Line
+	950  4050 1550 4050
+Connection ~ 750  3750
+Wire Wire Line
+	750  3750 850  3750
+Connection ~ 850  3750
+Wire Wire Line
+	850  3750 950  3750
+$Comp
+L power:+5V #PWR?
+U 1 1 5C18F55F
+P 2600 4700
+F 0 "#PWR?" H 2600 4550 50  0001 C CNN
+F 1 "+5V" H 2615 4873 50  0000 C CNN
+F 2 "" H 2600 4700 50  0001 C CNN
+F 3 "" H 2600 4700 50  0001 C CNN
+	1    2600 4700
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	5300 2450 5300 3000
+Wire Wire Line
+	2600 4700 2600 4900
+Connection ~ 2600 4900
+Wire Wire Line
+	2600 4900 2350 4900
 $EndSCHEMATC
