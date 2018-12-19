@@ -15,19 +15,19 @@
 #define USR 10//Ultrason Right
 #define ECHO 12//Retour ultrason
 #define BUZZ 9//Buzzer pin (doit etre PWM)
-#define LUXF A0//Lumiere Front (doit etre analog)
+#define LUXL A0//Lumiere Front (doit etre analog)
 #define LUXB A1//Lumiere Back (doit etre analog)
-#define LUXL A2//Lumiere Left (doit etre analog)
-#define LUXR A3//Lumiere Right (doit etre analog)
+#define LUXR A2//Lumiere Left (doit etre analog)
+#define LUXF A3//Lumiere Right (doit etre analog)
 #define LEDR 2 // led droite rouge
 #define LEDL 7 // led gauche rouge
 
-#define PROX_TH 10 // distance en cm a partir de laquelle le robot veut changer de direction
+#define PROX_TH 30 // distance en cm a partir de laquelle le robot veut changer de direction
 
 //Variables globales
 int C=0; //compteur de loop avec overflow
 int quantic=0; // Valeur aleatoire entre 0 et 100 qui change a chaque boucle
-//----Variables motrices
+//----Variables Motrices
 //Sens de rotations et positions initiales
 int sensA =1;
 int sensB =-1;
@@ -39,6 +39,9 @@ Servo phaseA;  // Moteur droite
 Servo phaseB;  // Moteur gauche
 Servo phaseC;  // Moteur equilibrage
 
+int ClearanceF = 100;
+int ClearanceR = 100;
+int ClearanceL = 100;
 
 
 
@@ -89,23 +92,29 @@ void bruit() {
 //Fonction qui retourne la distance en mm entre le capteur "Broche" et un obstacle à moins de 2m.
 //Bloque le code pendant 6ms max
 float DistUS(int Broche) {
-  
+  float Dist = 0.0;
   //Impulsion pour le capteur US
+  digitalWrite(Broche, LOW);
+  delayMicroseconds(5);
   digitalWrite(Broche, HIGH);
   delayMicroseconds(10);
   digitalWrite(Broche, LOW);
-  
-  // Attente de l'echo... 6ms timout (environ 2m, on est un insecte apres tout, on voit pas loin)
-  long dtus = pulseIn(ECHO, HIGH, 6000);
-  
-  float dist = (dtus * 0.34)/2.0; //conversion en cm
-   
-  return(dist);
-  //Les 3 lignes précedentes peuvent etre combinees en 1 (reduisant la lisibilite)
+ 
+  // Read the signal from the sensor: a HIGH pulse whose
+  // duration is the time (in microseconds) from the sending
+  // of the ping to the reception of its echo off of an object.
+  pinMode(ECHO, INPUT);
+  Dist = (pulseIn(ECHO, HIGH, 15000)/2) / 29.1;
+  // Convert the time into a distance. Divide by 29.1 or multiply by 0.0343
+  if(Dist == 0)
+   return ( 200.0);
+  else
+   return (Dist);   
+
 }
 
 
-// Retourne l'angle entre l'orientation du robot et la direction CLAIRE
+// Retourne l'angle entre l'orientation du robot et la direction SOMBRE
 int DirLowLux() {
   //Front, Right, Back, Left 0° -> 360° sens horaire
   int LumF =  analogReadN(LUXF, 10);
@@ -116,11 +125,11 @@ int DirLowLux() {
   if(LumF > LumR && LumF > LumL && LumF > LumB)
    return(2);
   if(LumR > LumF && LumR > LumL && LumR > LumB)
-   return(5);
+   return(4);
  if(LumB > LumR && LumB > LumL && LumB > LumF)
-   return(3);
+   return(8);
  if(LumL > LumR && LumL > LumF && LumL > LumB)
-   return(4);  
+   return(6);  
 }
 
 int MaxLux() {
@@ -145,32 +154,42 @@ void yeux(int droite, int gauche)
 //789 : 8 = avancer
 //456 : 4 et 6 = tourner
 //123 : 2 = reculer
-void motrice(int vitesse, int dir)
+void Motrice(int vitesse, int dir)
 {
+
+  //La phase A oscille entre 60 et 130
   if(posA<=59)
       sensA =4;
   if( posA >= 130)
       sensA = -4;
 
-    if(posB<=59)
-    {
+  // La phase B oscille entre 60 et 130
+  if(posB<=59)
+  {
       sensB =4;
+      //Controle de la phase C au moment ou B est en butee
       if(dir ==2 || dir == 6)
         posC = 70;
-      else
+      else // Dans le cas de la marche avant ou rotation Droite on inverse le mouvement
         posC = 110;
-    }
+  }
     if( posB >= 130)
     {
+      sensB = -4;
+
+      //Correction du dephasage avec A selon la direction
       if(dir ==2 || dir == 8)
         posA = 59;
-     if(dir ==4 || dir == 8)
+      if(dir ==4 || dir == 6)
         posA = 130;
-      sensB = -4;
+
+      //Correction du dephasage avec C selon la direction  
       if(dir == 8 || dir == 4)
         posC = 70;
       else
         posC = 110;
+
+
     }
     
     posA+=sensA;
@@ -219,21 +238,42 @@ void setup() {
 // the loop function runs over and over again forever
 void loop() {
   quantic = random(0, 100);
+  ClearanceF = DistUS(USF);
+  ClearanceL = DistUS(USL);
+  ClearanceR = DistUS(USR);
+//  Serial.println(ClearanceF);
+//  Serial.println(ClearanceL);
+//  Serial.println(ClearanceR);
+//    Serial.println("--------");
 
+//   Un objet est trop proche droit devant
   
-  // Un objet est trop proche droit devant
- /* if(dist(USF) < PROX_TH || dist(USR) < PROX_TH/2 ||  dist(USL) < PROX_TH/2)
-  {
-    if(dist(USR) < dist(USL) ) // Tourner vers droite
+    if(ClearanceL < PROX_TH || ClearanceR < PROX_TH)
     {
-       Motrice(-90, V);
+      if((ClearanceR < ClearanceL)) // Tourner vers gauche
+      {
+         Motrice(3, 4);
+      }
+      else // Tourner vers droite
+      {
+         Motrice(3, 6);
+      }
     }
-    else // Tourner vers gauche
+    if(ClearanceF < PROX_TH)
     {
-       Motrice(90, V);
+    for(int j=0 ; j<100 ; j++) 
+      Motrice(2, 2);
+    for(int j=0 ; j<300 ; j++) 
+      Motrice(2, 6);
+
     }
-  }
-*/
+    if(ClearanceL>PROX_TH && ClearanceR>PROX_TH && ClearanceF>PROX_TH)
+    {
+    Motrice(7, DirLowLux());
+    Serial.println(DirLowLux());
+   // Motrice(8, 8);
+   }
+
   // Envie de bouger ? + Vitesse voulue
 
   // Rotation lumiere
@@ -241,25 +281,25 @@ void loop() {
   // Deplacement
 
 
-   motrice(4, 2);
   
   
   //controle des yeux dans le noir
-  if(MaxLux() < 300)
-  {
-    if(quantic < 10)
-      yeux(LOW, LOW);
-    if(quantic >= 10 && quantic < 40)
-      yeux(LOW, HIGH);
-    if(quantic >= 40 && quantic < 80)
-      yeux(HIGH, LOW);
-    if(quantic >= 80)
-      yeux(HIGH, HIGH);
-  }
-  else
-  {
-    yeux(LOW, LOW);
-  }
+//  if(MaxLux() < 300)
+//  {
+//    if(quantic < 10)
+//      yeux(LOW, LOW);
+//    if(quantic >= 10 && quantic < 40)
+//      yeux(LOW, HIGH);
+//    if(quantic >= 40 && quantic < 80)
+//      yeux(HIGH, LOW);
+//    if(quantic >= 80)
+//      yeux(HIGH, HIGH);
+//    bruit();
+//  }
+//  else
+//  {
+//    yeux(LOW, LOW);
+//  }
   C++;
   //delay(300);
 }

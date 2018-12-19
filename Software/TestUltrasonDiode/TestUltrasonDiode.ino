@@ -1,4 +1,4 @@
-int trigPin[3] = {9, 13, 2};    // Trigger
+int trigPin[3] = {11, 8, 10};    // Trigger
 int echoPin = 12;    // Echo
 long duration, cm;
  int i = 0;
