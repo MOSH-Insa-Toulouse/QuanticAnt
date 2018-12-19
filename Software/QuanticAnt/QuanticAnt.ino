@@ -2,7 +2,10 @@
  * Projet MOSH de l'équipe Nicolas, Quentin et Soufian
  *  
  * Le projet vise à réaliser un robot imitant le comportement d'un insect.
- * -Déplacements aléatoires, Photophobe, évitement d'obstacles
+ * -Déplacements aléatoires sur pates
+ * -Photophobe
+ * -Evitement d'obstacles proches
+ * -s'imobilise et "Chante" lorsque la luminosité est faible
  * 
  * 
  * 
@@ -236,18 +239,51 @@ void setup() {
 }
 
 // the loop function runs over and over again forever
+/*Logique de bord :
+1) Verifier la luminosité. Sombre => arret et chant
+2) sinon verifier la position des obstacles => manoeuvre
+3) sinon aller dans la direction la plus sombre
+*/
 void loop() {
+
+
+  
   quantic = random(0, 100);
+
+  //Recuperation des distances aux objets
   ClearanceF = DistUS(USF);
   ClearanceL = DistUS(USL);
   ClearanceR = DistUS(USR);
+
 //  Serial.println(ClearanceF);
 //  Serial.println(ClearanceL);
 //  Serial.println(ClearanceR);
 //    Serial.println("--------");
 
+
+
+
+
 //   Un objet est trop proche droit devant
-  
+
+
+    //controle des yeux dans le noir
+  if(MaxLux() < 300)
+  {
+    if(quantic < 10)
+      yeux(LOW, LOW);
+    if(quantic >= 10 && quantic < 40)
+      yeux(LOW, HIGH);
+    if(quantic >= 40 && quantic < 80)
+      yeux(HIGH, LOW);
+    if(quantic >= 80)
+      yeux(HIGH, HIGH);
+    bruit();
+  }
+  else // Il fait jour, on se deplace
+  {
+    yeux(LOW, LOW);
+ 
     if(ClearanceL < PROX_TH || ClearanceR < PROX_TH)
     {
       if((ClearanceR < ClearanceL)) // Tourner vers gauche
@@ -267,39 +303,16 @@ void loop() {
       Motrice(2, 6);
 
     }
-    if(ClearanceL>PROX_TH && ClearanceR>PROX_TH && ClearanceF>PROX_TH)
+    if(ClearanceL>PROX_TH && ClearanceR>PROX_TH && ClearanceF>PROX_TH) // Aucun objet ne gene. On cherche le sombre
     {
-    Motrice(7, DirLowLux());
+    Motrice(8, DirLowLux());
     Serial.println(DirLowLux());
    // Motrice(8, 8);
    }
 
-  // Envie de bouger ? + Vitesse voulue
-
-  // Rotation lumiere
-
-  // Deplacement
-
-
+  }
   
-  
-  //controle des yeux dans le noir
-//  if(MaxLux() < 300)
-//  {
-//    if(quantic < 10)
-//      yeux(LOW, LOW);
-//    if(quantic >= 10 && quantic < 40)
-//      yeux(LOW, HIGH);
-//    if(quantic >= 40 && quantic < 80)
-//      yeux(HIGH, LOW);
-//    if(quantic >= 80)
-//      yeux(HIGH, HIGH);
-//    bruit();
-//  }
-//  else
-//  {
-//    yeux(LOW, LOW);
-//  }
+
   C++;
   //delay(300);
 }
