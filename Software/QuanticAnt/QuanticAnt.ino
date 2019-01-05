@@ -41,7 +41,11 @@ int posC = 65;
 Servo phaseA;  // Moteur droite
 Servo phaseB;  // Moteur gauche
 Servo phaseC;  // Moteur equilibrage
-
+/*
+ *   phaseA.attach(3);
+  phaseB.attach(5); 
+  phaseC.attach(6);
+ */
 int ClearanceF = 100;
 int ClearanceR = 100;
 int ClearanceL = 100;
@@ -80,14 +84,14 @@ void bruit() {
       // to calculate the note duration, take one second divided by the note type.
       //e.g. quarter note = 1000 / 4, eighth note = 1000/8, etc.
       int noteDuration = 3000 / noteDurations[thisNote];
-      tone(8, melody[thisNote], noteDuration);
+      tone(9, melody[thisNote], noteDuration);
   
       // to distinguish the notes, set a minimum time between them.
       // the note's duration + 30% seems to work well:
       int pauseBetweenNotes = noteDuration * 1.30;
       delay(pauseBetweenNotes);
       // stop the tone playing:
-      noTone(8);
+      noTone(9);
   }
 }
 
@@ -305,7 +309,7 @@ void loop() {
     }
     if(ClearanceL>PROX_TH && ClearanceR>PROX_TH && ClearanceF>PROX_TH) // Aucun objet ne gene. On cherche le sombre
     {
-    Motrice(8, DirLowLux());
+    Motrice(8, 2);
     Serial.println(DirLowLux());
    // Motrice(8, 8);
    }
