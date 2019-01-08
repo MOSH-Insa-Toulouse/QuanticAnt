@@ -69,17 +69,16 @@ long analogReadN(int pin, int N)
 // Fonction qui genere un bruit une fois invoquee.
 // Fonction bloquante, attention (le temps du bruit)
 void bruit() {
-    int silence = random(1, 6); // duree du silence avant de reprendre le champ
-    // notes du champ du robot
+    
     int melody[] = {
       208, 494, 415, 494, 415, 0
     };
     //NOTE_B2, NOTE_B3, NOTE_B2, 
     // note durations: 4 = quarter note, 8 = eighth note, etc.:
     int noteDurations[] = {
-      3*32, 3*32, 3*32, 3*32, 3*32, silence
+      3*32, 3*32, 3*32, 3*32, 3*32
     };//32, 32, 32, 
-    for (int thisNote = 0; thisNote < 6; thisNote++) {
+    for (int thisNote = 0; thisNote < 5; thisNote++) {
   
       // to calculate the note duration, take one second divided by the note type.
       //e.g. quarter note = 1000 / 4, eighth note = 1000/8, etc.
@@ -156,6 +155,9 @@ void yeux(int droite, int gauche)
   digitalWrite(LEDR, droite);
   digitalWrite(LEDL, gauche);
 }
+
+
+
 
 // Deplace QuanticAnt a la vitesse speed. La valeur Dir donne la direction selon le pave numerique
 //789 : 8 = avancer
@@ -272,7 +274,7 @@ void loop() {
 
 
     //controle des yeux dans le noir
-  if(MaxLux() < 300)
+  if(MaxLux() < 400)
   {
     if(quantic < 10)
       yeux(LOW, LOW);
@@ -282,7 +284,10 @@ void loop() {
       yeux(HIGH, LOW);
     if(quantic >= 80)
       yeux(HIGH, HIGH);
-    bruit();
+    phaseC.write(90);   
+    bruit(); //Blocant
+    delay(700);
+    
   }
   else // Il fait jour, on se deplace
   {
@@ -292,32 +297,41 @@ void loop() {
     {
       if((ClearanceR < ClearanceL)) // Tourner vers gauche
       {
-         Motrice(3, 4);
+         yeux(HIGH, HIGH);
+         delay(1300);
+         for(int j=0 ; j<130 ; j++) 
+          Motrice(3, 6);
       }
       else // Tourner vers droite
       {
-         Motrice(3, 6);
+         yeux(HIGH, HIGH);
+         delay(1300);
+         for(int j=0 ; j<130 ; j++) 
+          Motrice(3, 4);
       }
     }
     if(ClearanceF < PROX_TH)
     {
+     yeux(HIGH, HIGH);
+     delay(1300);
     for(int j=0 ; j<100 ; j++) 
-      Motrice(2, 2);
+      Motrice(5, 8);
     for(int j=0 ; j<300 ; j++) 
-      Motrice(2, 6);
+      Motrice(5, 6);
 
     }
     if(ClearanceL>PROX_TH && ClearanceR>PROX_TH && ClearanceF>PROX_TH) // Aucun objet ne gene. On cherche le sombre
     {
-    Motrice(8, 2);
-    Serial.println(DirLowLux());
+    for(int j=0 ; j<30 ; j++)   
+    Motrice(3, 2);
+   //Serial.println(DirLowLux());
    // Motrice(8, 8);
    }
+      yeux(LOW, LOW);
 
   }
   
 
   C++;
-  //delay(300);
 }
 
