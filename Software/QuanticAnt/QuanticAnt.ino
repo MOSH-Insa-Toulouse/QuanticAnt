@@ -3,7 +3,7 @@
  *  
  * Le projet vise à réaliser un robot imitant le comportement d'un insect.
  * -Déplacements aléatoires sur pates
- * -Photophobe
+ * -Photosensible
  * -Evitement d'obstacles proches
  * -s'imobilise et "Chante" lorsque la luminosité est faible
  * 
@@ -30,6 +30,10 @@
 //Variables globales
 int C=0; //compteur de loop avec overflow
 int quantic=0; // Valeur aleatoire entre 0 et 100 qui change a chaque boucle
+int ClearanceF = 100; //distances ultrason mesurees front (defaut 1m)
+int ClearanceR = 100;
+int ClearanceL = 100;
+
 //----Variables Motrices
 //Sens de rotations et positions initiales
 int sensA =1;
@@ -38,23 +42,18 @@ int sensC =1;
 int posA = 59;
 int posB = 139;
 int posC = 65;
-Servo phaseA;  // Moteur droite
-Servo phaseB;  // Moteur gauche
-Servo phaseC;  // Moteur equilibrage
-/*
- *   phaseA.attach(3);
-  phaseB.attach(5); 
-  phaseC.attach(6);
- */
-int ClearanceF = 100;
-int ClearanceR = 100;
-int ClearanceL = 100;
+Servo phaseA;  // Moteur droite pin 3
+Servo phaseB;  // Moteur gauche pin 5
+Servo phaseC;  // Moteur equilibrage pin 6
 
 
 
 
 
-//Retourne la moyenne de N mesures (moins de bruit) Attention, ne pas utiliser sur un pont diviseur fragile
+
+
+
+//Retourne la moyenne de N mesures (moins de bruit) Attention, ne pas utiliser sur un pont diviseur fragile. (>10kohm)
 long analogReadN(int pin, int N)
 {
   long moy = 0;
@@ -66,32 +65,22 @@ long analogReadN(int pin, int N)
 
 
 
-// Fonction qui genere un bruit une fois invoquee.
-// Fonction bloquante, attention (le temps du bruit)
+// Fonction qui genere un bruit une fois invoquee. Inspiree de l'exemple "tone"
+// Fonction bloquante, attention ! (le temps du bruit)
 void bruit() {
     
-    int melody[] = {
-      208, 494, 415, 494, 415, 0
-    };
-    //NOTE_B2, NOTE_B3, NOTE_B2, 
-    // note durations: 4 = quarter note, 8 = eighth note, etc.:
-    int noteDurations[] = {
-      3*32, 3*32, 3*32, 3*32, 3*32
-    };//32, 32, 32, 
-    for (int thisNote = 0; thisNote < 5; thisNote++) {
+    int melody[] =        {208, 494, 415, 494, 415}; //tons du buzzer
+    int noteDurations[] = {96, 96, 96, 96, 96}; // Durees des tons
   
-      // to calculate the note duration, take one second divided by the note type.
-      //e.g. quarter note = 1000 / 4, eighth note = 1000/8, etc.
+    for (int thisNote = 0; thisNote < 5; thisNote++)
+    {
       int noteDuration = 3000 / noteDurations[thisNote];
-      tone(9, melody[thisNote], noteDuration);
-  
-      // to distinguish the notes, set a minimum time between them.
-      // the note's duration + 30% seems to work well:
       int pauseBetweenNotes = noteDuration * 1.30;
+      tone(BUZZ, melody[thisNote], noteDuration);
       delay(pauseBetweenNotes);
       // stop the tone playing:
-      noTone(9);
-  }
+      noTone(BUZZ);
+    }
 }
 
 
@@ -120,7 +109,7 @@ float DistUS(int Broche) {
 }
 
 
-// Retourne l'angle entre l'orientation du robot et la direction SOMBRE
+// Retourne La direction sombre
 int DirLowLux() {
   //Front, Right, Back, Left 0° -> 360° sens horaire
   int LumF =  analogReadN(LUXF, 10);
@@ -129,15 +118,16 @@ int DirLowLux() {
   int LumB =  analogReadN(LUXB, 10);
 
   if(LumF > LumR && LumF > LumL && LumF > LumB)
-   return(2);
+   return(2); // Derriere
   if(LumR > LumF && LumR > LumL && LumR > LumB)
-   return(4);
+   return(4); // gauche
  if(LumB > LumR && LumB > LumL && LumB > LumF)
-   return(8);
+   return(8); // Devant
  if(LumL > LumR && LumL > LumF && LumL > LumB)
-   return(6);  
+   return(6); // Droite
 }
 
+//Retourne la luminosite la plus forte (sonde les 4 capteurs).
 int MaxLux() {
   int maxL = analogReadN(LUXF, 10);
   if( analogReadN(LUXL, 10) > maxL)
@@ -148,6 +138,7 @@ int MaxLux() {
      maxL = analogReadN(LUXB, 10);
   return maxL;
 }
+
 
 //Controle des yeux rouge du robot
 void yeux(int droite, int gauche)
@@ -177,7 +168,7 @@ void Motrice(int vitesse, int dir)
   {
       sensB =4;
       //Controle de la phase C au moment ou B est en butee
-      if(dir ==2 || dir == 6)
+      if(dir ==8 || dir == 6)
         posC = 70;
       else // Dans le cas de la marche avant ou rotation Droite on inverse le mouvement
         posC = 110;
@@ -187,13 +178,13 @@ void Motrice(int vitesse, int dir)
       sensB = -4;
 
       //Correction du dephasage avec A selon la direction
-      if(dir ==2 || dir == 8)
+      if(dir ==8 || dir == 2)
         posA = 59;
       if(dir ==4 || dir == 6)
         posA = 130;
 
       //Correction du dephasage avec C selon la direction  
-      if(dir == 8 || dir == 4)
+      if(dir == 2 || dir == 4)
         posC = 70;
       else
         posC = 110;
@@ -202,10 +193,10 @@ void Motrice(int vitesse, int dir)
     }
     
     posA+=sensA;
-    posB+=sensB; 
-    phaseA.write(posA);              // tell servo to go to position in variable 'pos'
-    phaseB.write(posB);              // tell servo to go to position in variable 'pos'
-    phaseC.write(posC);              // tell servo to go to position in variable 'pos'
+    posB+=sensB;
+    phaseA.write(posA);           
+    phaseB.write(posB);         
+    phaseC.write(posC);        
     delay(80/vitesse);  
 }
 
@@ -229,53 +220,66 @@ void setup() {
   digitalWrite(USF, LOW);
   digitalWrite(USR, LOW);
   
-  
-  randomSeed(analogRead(A4));
+
+  randomSeed(analogRead(A4)); // Recuperation des parasites pour generer le random
   
   //Preparation des moteurs
   phaseA.attach(3);
   phaseB.attach(5); 
   phaseC.attach(6);
-  Serial.begin(9600);
-     phaseA.write(posA);              // tell servo to go to position in variable 'pos'
-    phaseB.write(posB);              // tell servo to go to position in variable 'pos'
-    phaseC.write(posC);   
-  delay(500);
+  
+  phaseA.write(posA);              
+  phaseB.write(posB);        
+  phaseC.write(posC);   
 
+  
+  Serial.begin(9600);
+
+
+  //Le robot dit bonjour
+  for(int j=0; j<5 ;j++)
+  {
+    bruit();
+    yeux(HIGH, LOW);
+    delay(50);
+    yeux(LOW, HIGH);
+    delay(50);
+  }
+  yeux(LOW, LOW);
 }
 
-// the loop function runs over and over again forever
+
 /*Logique de bord :
 1) Verifier la luminosité. Sombre => arret et chant
 2) sinon verifier la position des obstacles => manoeuvre
-3) sinon aller dans la direction la plus sombre
+3) sinon aller vers l'avant
+
+Evolution possible : Utiliser les 4 capteurs de luminosite pour diriger le robot vers le noir.
+Les capteurs sont presents mais pas utilises dans le code actuel. La fonction qui determine la direction sombre
+est deja codee.
 */
+
+
 void loop() {
 
 
   
-  quantic = random(0, 100);
+  quantic = random(0, 100); // Nombre aleatoire de ce cycle
 
-  //Recuperation des distances aux objets
+  //Recuperation des distances aux objets (prend du temps !!)
   ClearanceF = DistUS(USF);
   ClearanceL = DistUS(USL);
   ClearanceR = DistUS(USR);
 
-//  Serial.println(ClearanceF);
-//  Serial.println(ClearanceL);
-//  Serial.println(ClearanceR);
-//    Serial.println("--------");
+  Serial.println("Avant "+String(ClearanceF));
+  Serial.println("Gauche "+String(ClearanceL));
+  Serial.println("Droite "+String(ClearanceR));
+  Serial.println("--------");
 
-
-
-
-
-//   Un objet est trop proche droit devant
-
-
-    //controle des yeux dans le noir
+  //Comportement dans le noir
   if(MaxLux() < 400)
   {
+    //Comportement aleatoire des yeux
     if(quantic < 10)
       yeux(LOW, LOW);
     if(quantic >= 10 && quantic < 40)
@@ -284,54 +288,69 @@ void loop() {
       yeux(HIGH, LOW);
     if(quantic >= 80)
       yeux(HIGH, HIGH);
-    phaseC.write(90);   
-    bruit(); //Blocant
-    delay(700);
-    
+      
+    phaseC.write(90); // relaxe le moteur avant 
+    delay(100);
+    if(C%7 == 0)
+      bruit(); //Blocant quelques diziemes de secondes
+      
   }
   else // Il fait jour, on se deplace
   {
     yeux(LOW, LOW);
  
-    if(ClearanceL < PROX_TH || ClearanceR < PROX_TH)
+    //Gestion des collisions.
+    if((ClearanceR < PROX_TH)) // Tourner vers gauche
     {
-      if((ClearanceR < ClearanceL)) // Tourner vers gauche
-      {
-         yeux(HIGH, HIGH);
-         delay(1300);
-         for(int j=0 ; j<130 ; j++) 
-          Motrice(3, 6);
-      }
-      else // Tourner vers droite
-      {
-         yeux(HIGH, HIGH);
-         delay(1300);
-         for(int j=0 ; j<130 ; j++) 
-          Motrice(3, 4);
-      }
+       yeux(HIGH, HIGH);
+       delay(1300); // Le robot fait le mort
+       for(int j=0 ; j<130 ; j++) 
+        Motrice(3, 6);
     }
-    if(ClearanceF < PROX_TH)
+    else if( ClearanceL < PROX_TH)// Tourner vers droite
+    {
+       yeux(HIGH, HIGH);
+       delay(1300); // Le robot fait le mort
+       for(int j=0 ; j<130 ; j++) 
+        Motrice(3, 4);
+    }
+    else if(ClearanceF < PROX_TH)// Reculer puis demi-tour
     {
      yeux(HIGH, HIGH);
-     delay(1300);
-    for(int j=0 ; j<100 ; j++) 
-      Motrice(5, 8);
+     delay(1300); // Le robot fait le mort
+    for(int j=0 ; j<300 ; j++) 
+      Motrice(5, 2);
     for(int j=0 ; j<300 ; j++) 
       Motrice(5, 6);
 
     }
-    if(ClearanceL>PROX_TH && ClearanceR>PROX_TH && ClearanceF>PROX_TH) // Aucun objet ne gene. On cherche le sombre
+    if(ClearanceL>PROX_TH && ClearanceR>PROX_TH && ClearanceF>PROX_TH) // Aucun objet ne gene. On execute la marche habituelle du robot
+    {
+
+      
+    if(quantic < 5) // Parfois l'insecte tourne sans raison dans un sens
+    {
+     for(int j=0 ; j<130 ; j++) 
+        Motrice(3, 4);
+    }
+    if(quantic >= 5 && quantic < 90) // ou dans l'autre !
+    {
+     for(int j=0 ; j<130 ; j++) 
+        Motrice(3, 4);
+    }
+    if(quantic >= 90) // Le reste du temps il avance
     {
     for(int j=0 ; j<30 ; j++)   
-    Motrice(3, 2);
-   //Serial.println(DirLowLux());
-   // Motrice(8, 8);
+      Motrice(3, 8);
+    }
+    
+    //Motrice(8, DirLowLux()); // Suivi de direction sombre desactive. (instable, besoin de lissage).
+   Serial.println("LowLUX "+String(DirLowLux()));
    }
-      yeux(LOW, LOW);
 
   }
   
 
-  C++;
+  C++; // Compteur de boucle
 }
 
