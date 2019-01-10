@@ -26,7 +26,7 @@
 #define LEDL 7 // led gauche rouge
 
 #define PROX_TH 30 // distance en cm a partir de laquelle le robot veut changer de direction
-
+#define NIGHTLEV 400 // Niveau de lumiere correspondant a la nuit (plus grande la valeur, plus facilement le robot passe en mode nuit)
 //Variables globales
 int C=0; //compteur de loop avec overflow
 int quantic=0; // Valeur aleatoire entre 0 et 100 qui change a chaque boucle
@@ -277,7 +277,7 @@ void loop() {
   Serial.println("--------");
 
   //Comportement dans le noir
-  if(MaxLux() < 400)
+  if(MaxLux() < NIGHTLEV)
   {
     //Comportement aleatoire des yeux
     if(quantic < 10)
