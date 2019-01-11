@@ -328,24 +328,27 @@ void loop() {
     {
 
       
-    if(quantic < 5) // Parfois l'insecte tourne sans raison dans un sens
-    {
-     for(int j=0 ; j<130 ; j++) 
-        Motrice(3, 4);
-    }
-    if(quantic >= 5 && quantic < 90) // ou dans l'autre !
-    {
-     for(int j=0 ; j<130 ; j++) 
-        Motrice(3, 4);
-    }
-    if(quantic >= 90) // Le reste du temps il avance
-    {
-    for(int j=0 ; j<30 ; j++)   
+//    if(quantic < 2) // Parfois l'insecte tourne sans raison dans un sens
+//    {
+//     for(int j=0 ; j<30 ; j++) 
+//        Motrice(3, 4);
+//    }
+//    if(quantic >= 2 && quantic < 5) // ou dans l'autre !
+//    {
+//     for(int j=0 ; j<30 ; j++) 
+//        Motrice(3, 4);
+//    }
+//    if(quantic >= 5) // Le reste du temps il avance
+//    {
+//    for(int j=0 ; j<30 ; j++)   
+//      Motrice(3, 8);
+//    }
+    for(int j=0 ; j<40 ; j++)   
       Motrice(3, 8);
-    }
-    
+
+    //Serial.println(quantic);
     //Motrice(8, DirLowLux()); // Suivi de direction sombre desactive. (instable, besoin de lissage).
-   Serial.println("LowLUX "+String(DirLowLux()));
+   //Serial.println("LowLUX "+String(DirLowLux()));
    }
 
   }
