@@ -1,11 +1,33 @@
 /***********************************************************************
- * Projet MOSH de l'équipe Nicolas, Quentin et Soufian
+ * 
+ * .______   .______        ______          __   _______ .___________.   .___  ___.   ______        _______. __    __  
+|   _  \  |   _  \      /  __  \        |  | |   ____||           |   |   \/   |  /  __  \      /       ||  |  |  | 
+|  |_)  | |  |_)  |    |  |  |  |       |  | |  |__   `---|  |----`   |  \  /  | |  |  |  |    |   (----`|  |__|  | 
+|   ___/  |      /     |  |  |  | .--.  |  | |   __|      |  |        |  |\/|  | |  |  |  |     \   \    |   __   | 
+|  |      |  |\  \----.|  `--'  | |  `--'  | |  |____     |  |        |  |  |  | |  `--'  | .----)   |   |  |  |  | 
+| _|      | _| `._____| \______/   \______/  |_______|    |__|        |__|  |__|  \______/  |_______/    |__|  |__| 
+                                                                                                                    
+ ___     ___    __    ___         ___     ___    __    ___                                                          
+|__ \   / _ \  /_ |  / _ \       |__ \   / _ \  /_ |  / _ \                                                         
+   ) | | | | |  | | | (_) |  ______ ) | | | | |  | | | (_) |                                                        
+  / /  | | | |  | |  > _ <  |______/ /  | | | |  | |  \__, |                                                        
+ / /_  | |_| |  | | | (_) |       / /_  | |_| |  | |    / /                                                         
+|____|  \___/   |_|  \___/       |____|  \___/   |_|   /_/                                                          
+                                                                                                                    
+  ______      __    __       ___      .__   __. .___________. __    ______         ___      .__   __. .___________. 
+ /  __  \    |  |  |  |     /   \     |  \ |  | |           ||  |  /      |       /   \     |  \ |  | |           | 
+|  |  |  |   |  |  |  |    /  ^  \    |   \|  | `---|  |----`|  | |  ,----'      /  ^  \    |   \|  | `---|  |----` 
+|  |  |  |   |  |  |  |   /  /_\  \   |  . `  |     |  |     |  | |  |          /  /_\  \   |  . `  |     |  |      
+|  `--'  '--.|  `--'  |  /  _____  \  |  |\   |     |  |     |  | |  `----.    /  _____  \  |  |\   |     |  |      
+ \_____\_____\\______/  /__/     \__\ |__| \__|     |__|     |__|  \______|   /__/     \__\ |__| \__|     |__|      
+                                                                                                                    
+ * de l'équipe Nicolas, Quentin et Soufian
  *  
- * Le projet vise à réaliser un robot imitant le comportement d'un insect.
- * -Déplacements aléatoires sur pates
+ * Le projet vise à réaliser un robot imitant le comportement d'un insecte.
+ * -Déplacements aléatoires sur pattes
  * -Photosensible
  * -Evitement d'obstacles proches
- * -s'imobilise et "Chante" lorsque la luminosité est faible
+ * -s'immobilise et "Chante" lorsque la luminosité est faible
  * 
  * 
  * 
@@ -95,12 +117,11 @@ float DistUS(int Broche) {
   delayMicroseconds(10);
   digitalWrite(Broche, LOW);
  
-  // Read the signal from the sensor: a HIGH pulse whose
-  // duration is the time (in microseconds) from the sending
-  // of the ping to the reception of its echo off of an object.
+  // Recupere le signal echo des capteurs
+  // La duree est en microseconds
   pinMode(ECHO, INPUT);
   Dist = (pulseIn(ECHO, HIGH, 15000)/2) / 29.1;
-  // Convert the time into a distance. Divide by 29.1 or multiply by 0.0343
+  // conversion du temps en distance en divisant par 29.1
   if(Dist == 0)
    return ( 200.0);
   else
@@ -168,7 +189,7 @@ void Motrice(int vitesse, int dir)
   {
       sensB =4;
       //Controle de la phase C au moment ou B est en butee
-      if(dir ==8 || dir == 6)
+      if(dir ==8 || dir == 4)
         posC = 70;
       else // Dans le cas de la marche avant ou rotation Droite on inverse le mouvement
         posC = 110;
@@ -184,7 +205,7 @@ void Motrice(int vitesse, int dir)
         posA = 130;
 
       //Correction du dephasage avec C selon la direction  
-      if(dir == 2 || dir == 4)
+      if(dir == 2 || dir == 6)
         posC = 70;
       else
         posC = 110;
@@ -305,14 +326,14 @@ void loop() {
        yeux(HIGH, HIGH);
        delay(1300); // Le robot fait le mort
        for(int j=0 ; j<130 ; j++) 
-        Motrice(3, 6);
+        Motrice(3, 4);
     }
     else if( ClearanceL < PROX_TH)// Tourner vers droite
     {
        yeux(HIGH, HIGH);
        delay(1300); // Le robot fait le mort
        for(int j=0 ; j<130 ; j++) 
-        Motrice(3, 4);
+        Motrice(3, 6);
     }
     else if(ClearanceF < PROX_TH)// Reculer puis demi-tour
     {
@@ -321,13 +342,13 @@ void loop() {
     for(int j=0 ; j<300 ; j++) 
       Motrice(5, 2);
     for(int j=0 ; j<300 ; j++) 
-      Motrice(5, 6);
+      Motrice(5, 4);
 
     }
     if(ClearanceL>PROX_TH && ClearanceR>PROX_TH && ClearanceF>PROX_TH) // Aucun objet ne gene. On execute la marche habituelle du robot
     {
 
-      
+      //Fonction de marche aleatoire 1% dns un sens, 3% dans l'autre, 96% tout droit 
 //    if(quantic < 2) // Parfois l'insecte tourne sans raison dans un sens
 //    {
 //     for(int j=0 ; j<30 ; j++) 
@@ -336,19 +357,20 @@ void loop() {
 //    if(quantic >= 2 && quantic < 5) // ou dans l'autre !
 //    {
 //     for(int j=0 ; j<30 ; j++) 
-//        Motrice(3, 4);
+//        Motrice(3, 6);
 //    }
 //    if(quantic >= 5) // Le reste du temps il avance
 //    {
 //    for(int j=0 ; j<30 ; j++)   
 //      Motrice(3, 8);
 //    }
-    for(int j=0 ; j<40 ; j++)   
+//    Serial.println(quantic);
+//    Motrice(8, DirLowLux()); // Suivi de direction sombre desactive. (instable, besoin de lissage).
+//    Serial.println("LowLUX "+String(DirLowLux()));
+      for(int j=0 ; j<40 ; j++)   
       Motrice(3, 8);
 
-    //Serial.println(quantic);
-    //Motrice(8, DirLowLux()); // Suivi de direction sombre desactive. (instable, besoin de lissage).
-   //Serial.println("LowLUX "+String(DirLowLux()));
+    
    }
 
   }
